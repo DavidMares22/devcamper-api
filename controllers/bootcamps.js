@@ -1,9 +1,13 @@
+const Bootcamp = require("../models/Bootcamp");
+
 // @desc Get all bootcamps
 // @route Get /api/v1/bootcamps
 // @access Public
 
 exports.getBootcamps = (req, res, next) => {
-  res.status(200).json({ success: true, msg: "Show all bootcamps", hello: req.hello});
+  res
+    .status(200)
+    .json({ success: true, msg: "Show all bootcamps", hello: req.hello });
 };
 
 // @desc Get single bootcamp
@@ -20,8 +24,20 @@ exports.getBootcamp = (req, res, next) => {
 // @route POST /api/v1/bootcamps
 // @access Private
 
-exports.createBootcamp = (req, res, next) => {
-  res.status(200).json({ success: true, msg: `Create new bootcamp ` });
+exports.createBootcamp = async (req, res, next) => {
+
+  try {
+    
+    const bootcamp = await Bootcamp.create(req.body)
+  
+    res.status(201).json({
+      success: true,
+      data:bootcamp
+    })
+  } catch (error) {
+    res.status(400).json({success: false})
+  }
+
 };
 
 // @desc Update bootcamp
@@ -29,7 +45,7 @@ exports.createBootcamp = (req, res, next) => {
 // @access Private
 
 exports.updateBootcamp = (req, res, next) => {
-    res
+  res
     .status(200)
     .json({ success: true, msg: `update bootcamp  ${req.params.id}` });
 };
@@ -39,7 +55,7 @@ exports.updateBootcamp = (req, res, next) => {
 // @access Private
 
 exports.deleteBootcamp = (req, res, next) => {
-    res
+  res
     .status(200)
     .json({ success: true, msg: `delete bootcamp  ${req.params.id}` });
 };
