@@ -39,16 +39,17 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 // @access    Private/Admin
 exports.updateUser = asyncHandler(async (req, res, next) => {
 
-  if(req.body.password){
-    console.log("tiene password");
-    const salt = await bcrypt.genSalt(10);
-    req.body.password = await bcrypt.hash(req.body.password, salt);
-  }
+  const user = await User.findById(req.params.id).select("+password");
+  
 
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
+  // user.password = req.body.password;
+  // user.email = req.body.email;
+  // user.name = req.body.name;
+
+  user.set(req.body)
+
+  await user.save();
+  
 
   res.status(200).json({
     success: true,
